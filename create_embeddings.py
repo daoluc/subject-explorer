@@ -29,7 +29,11 @@ def save_embeddings(data, embeddings, final_2d_embeddings, output_file):
         result.append({
             'id' :data['SUBJECT_ID'].iloc[i],
             'title': data['SUBJECT_TITLE'].iloc[i],
-            # 'embedding': embeddings[i].tolist(),
+            'core': data['SUBJECT_ID'].iloc[i] in ('EM.411', 'EM.412', 'EM.413'),
+            'depth': data['isDepth'].iloc[i] == 'Y',
+            'elective': data['isElective'].iloc[i] == 'Y',
+            'eng': bool(data['engUnits'].iloc[i] is not None and pd.notna(data['engUnits'].iloc[i]) and data['engUnits'].iloc[i] > 0),
+            'mgmt': bool(data['mgmtUnits'].iloc[i] is not None and pd.notna(data['mgmtUnits'].iloc[i]) and data['mgmtUnits'].iloc[i] > 0),
             'x': float(final_2d_embeddings[i][0]),
             'y': float(final_2d_embeddings[i][1]),
         })
