@@ -47,17 +47,19 @@ for (const key in points) {
 labels.change.emit();
 """
 
-types = ['Core', 'Eng & Mgmt Depth', 'Eng Depth', 'Mgmt Depth', 'Eng & Mgmt Elective', 'Eng Elective', 'Mgmt Elective', 'Other']
-colors = ['red', 'purple',           'blue',      'green',      'purple',              'blue',         'green',         'gray']
+types =  ['Core',    'Eng & Mgmt Depth', 'Eng Depth', 'Mgmt Depth', 'Eng & Mgmt Elective', 'Eng Elective', 'Mgmt Elective', 'Other']
+colors = ['#0460D9', '#F2A413',          '#750014',   '#358C6C',    '#F2A413',             '#750014',      '#358C6C',       'gray']
 points = dict()
 
 for t in types:
     source = ColumnDataSource(data[data["type"] == t])
     points[t] = source
     if(t=='Core'):
-        p.square('x', 'y', size=8, source=source, alpha=0.3, legend_label=t, color=colors[types.index(t)])
+        p.square('x', 'y', size=8, source=source, alpha=0.8, legend_label=t, color=colors[types.index(t)])
     elif 'Depth' in t:
-        p.square('x', 'y', size=8, source=source, alpha=0.3, legend_label=t, color=colors[types.index(t)])
+        p.square('x', 'y', size=8, source=source, alpha=0.5, legend_label=t, color=colors[types.index(t)])
+    elif 'Elective' in t:
+        p.triangle('x', 'y', size=8, source=source, alpha=0.5, legend_label=t, color=colors[types.index(t)])
     else:
         p.circle('x', 'y', size=4, source=source, alpha=0.3, legend_label=t, color=colors[types.index(t)])
     p.legend.title = 'Subject Type'
