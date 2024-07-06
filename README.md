@@ -21,3 +21,9 @@ python -m venv env
 ```bash
 pip install -r requirements.txt
 ```
+
+## Run streamlit
+
+```bash
+streamlit run app.py
+```
