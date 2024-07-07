@@ -12,9 +12,7 @@ from create_embeddings import create_embeddings
 from load_embeddings import get_raw_embeddings_from_file  
 
 GPT_MODEL = "gpt-4o"
-client = OpenAI(
-    
-)
+client = OpenAI()
 
 subject_ids, subject_embeddings, subject_titles, subject_description, x, y = get_raw_embeddings_from_file("full_embeddings.json")
 threshold = 0.42
@@ -24,10 +22,10 @@ def highlight_subjects(subject_ids):
     print("labels: ",st.session_state.labels)
     new_data = dict(x=[], y=[], t=[], ind=[])
     for id in subject_ids:
-        new_data['x'].append(x[id])
-        new_data['y'].append(y[id])
-        new_data['t'].append(id + ' ' + subject_titles[id])
-        new_data['ind'].append(id)
+        new_data['x'].append(x[id.upper()])
+        new_data['y'].append(y[id.upper()])
+        new_data['t'].append(id.upper() + ' ' + subject_titles[id.upper()])
+        new_data['ind'].append(id.upper())
     st.session_state.labels.data = new_data
     return "Subjects are highlighted in the graph"
 
@@ -137,7 +135,7 @@ tools = [
     #                         "type": "string",
     #                         "description": "subject id",
     #                     },
-    #                     "description": "array of subject ids to highlight in the graph",
+    #                     "description": "array of subject ids to get info for",
     #                 },
     #             },
     #             "required": ["subject_ids"],
@@ -148,7 +146,7 @@ tools = [
         "type": "function",
         "function": {
             "name": "highlight_subjects",
-            "description": "Highlight subjects in the graph. Call once at a time for multiple subjects",
+            "description": "Highlight subjects in the graph. Call once for multiple subjects",
             "parameters": {
                 "type": "object",
                 "properties": {

@@ -4,8 +4,23 @@ from bokeh.plotting import ColumnDataSource, figure
 from agent import add_assistant_response
 from load_embeddings import get_2d_embeddings_from_file
 from bokeh.models import TapTool, CustomJS, HoverTool, LabelSet
+from streamlit_js_eval import streamlit_js_eval
 
 st.set_page_config(layout="wide")
+
+st.markdown(
+    """
+<style>
+    h1 {
+        padding: 0;
+    }
+    div[data-testid="stAppViewBlockContainer"] {
+        padding: 50px !important;
+    }
+</style>
+""",
+    unsafe_allow_html=True,
+)
 
 if 'labels' not in st.session_state:
     st.session_state['labels'] = ColumnDataSource(data=dict(x=[], y=[], t=[], ind=[]))
@@ -13,17 +28,19 @@ if 'labels' not in st.session_state:
 # Initialize the chat history
 if 'messages' not in st.session_state:
     initial_messages = []
-    initial_messages.append({"role": "system", "content": "Don't make assumptions about what values to plug into functions. Ask for clarification if a user request is ambiguous. Always include both subject id and subject title such as 'EM.411 Foundations of System Design and Management' when referring to a subject. Always highlight the subjects in the graph when referring to them."})
+    initial_messages.append({"role": "system", "content": "Don't make assumptions about what values to plug into functions. Ask for clarification if a user request is ambiguous. Always include both subject id and subject title such as 'EM.411 Foundations of System Design and Management' when referring to a subject. Always highlight the subjects in the graph"})
     initial_messages.append({"role": "assistant", "content": "how can I help you today?"})
     st.session_state['messages'] = initial_messages
 
+st.title('MIT Subject Explorer')
+page_height = streamlit_js_eval(js_expressions='window.innerWidth', key='HEIGHT',  want_output = True,)
 col1, col2 = st.columns([4,6], gap='large')
 
 # chat bar
 with col1:
-    st.header("Ask")
+    # st.header("Ask")
     
-    chat_container = st.container(height=750)    
+    chat_container = st.container( height=max(page_height-850, 500) )    
     
     if prompt := st.chat_input("What is up?"):   
         st.session_state.messages.append({"role": "user", "content": prompt})
@@ -38,8 +55,6 @@ with col1:
         
 # graph
 with col2:
-    st.title('MIT Subject Explorer')
-
     TOOLTIPS = """
     <div style="width:300px;">
     @id @title <br> <br>
@@ -48,7 +63,7 @@ with col2:
 
     data = get_2d_embeddings_from_file('full_embeddings.json')
 
-    p = figure(width=700, height=600, x_range=(-5, 20), y_range=(0,25), tooltips=TOOLTIPS,
+    p = figure(width=700, height=500, x_range=(-5, 20), y_range=(0,25), tooltips=TOOLTIPS,
             title="UMAP projection of the embeddings of MIT subjects")
     
     # labels = st.session_state.labels 

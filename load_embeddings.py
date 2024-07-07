@@ -26,10 +26,10 @@ def get_raw_embeddings_from_file(file_name):
             title_check.append(item['t'])
         ids.append(item['id'])
         embeddings.append(item['e'])
-        titles[item['id']] = item['t']
-        descriptions[item['id']] = item['d']
-        x[item['id']] = item['x']
-        y[item['id']] = item['y']
+        titles[item['id'].upper()] = item['t']
+        descriptions[item['id'].upper()] = item['d']
+        x[item['id'].upper()] = item['x']
+        y[item['id'].upper()] = item['y']
     return ids, embeddings, titles, descriptions, x, y
     
 def get_2d_embeddings_from_file(file_name):            
