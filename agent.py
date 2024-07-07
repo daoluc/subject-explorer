@@ -12,7 +12,9 @@ from create_embeddings import create_embeddings
 from load_embeddings import get_raw_embeddings_from_file  
 
 GPT_MODEL = "gpt-4o"
-client = OpenAI()
+client = OpenAI(
+    api_key=st.secrets["OPENAI_API_KEY"]
+)
 
 subject_ids, subject_embeddings, subject_titles, subject_description, x, y = get_raw_embeddings_from_file("full_embeddings.json")
 threshold = 0.42
