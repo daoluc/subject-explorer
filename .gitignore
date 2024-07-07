@@ -1,5 +1,6 @@
 # project files
 *.xlsx
+secrets.toml
 archive/
 
 # Byte-compiled / optimized / DLL files
