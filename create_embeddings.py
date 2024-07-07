@@ -28,14 +28,16 @@ def save_embeddings(data, embeddings, final_2d_embeddings, output_file):
     for i in range(len(embeddings)):
         result.append({
             'id' :data['SUBJECT_ID'].iloc[i],
-            'title': data['SUBJECT_TITLE'].iloc[i],
-            'core': data['SUBJECT_ID'].iloc[i] in ('EM.411', 'EM.412', 'EM.413'),
-            'depth': data['isDepth'].iloc[i] == 'Y',
-            'elective': data['isElective'].iloc[i] == 'Y',
-            'eng': bool(data['engUnits'].iloc[i] is not None and pd.notna(data['engUnits'].iloc[i]) and data['engUnits'].iloc[i] > 0),
-            'mgmt': bool(data['mgmtUnits'].iloc[i] is not None and pd.notna(data['mgmtUnits'].iloc[i]) and data['mgmtUnits'].iloc[i] > 0),
-            'x': float(final_2d_embeddings[i][0]),
-            'y': float(final_2d_embeddings[i][1]),
+            't': data['SUBJECT_TITLE'].iloc[i],
+            'd': data['SUBJECT_DESCRIPTION'].iloc[i],                         
+            'core': 1 if data['SUBJECT_ID'].iloc[i] in ('EM.411', 'EM.412', 'EM.413') else 0,                        
+            'depth': 1 if data['isDepth'].iloc[i] == 'Y' else 0,
+            'elect': 1 if data['isElective'].iloc[i] == 'Y' else 0,
+            'eng': 1 if (data['engUnits'].iloc[i] is not None and pd.notna(data['engUnits'].iloc[i]) and data['engUnits'].iloc[i] > 0) else 0,
+            'mgmt': 1 if (data['mgmtUnits'].iloc[i] is not None and pd.notna(data['mgmtUnits'].iloc[i]) and data['mgmtUnits'].iloc[i] > 0) else 0,
+            'x': round(float(final_2d_embeddings[i][0]), 4),
+            'y': round(float(final_2d_embeddings[i][1]), 4),
+            'e': embeddings[i].tolist(),
         })
     
     with open(output_file, 'w') as file:
@@ -57,11 +59,13 @@ def create_embedding_file(file_name):
         umap_reducer = umap.UMAP(n_components=2, random_state=42)
         final_2d_embeddings = umap_reducer.fit_transform(embeddings)
         
-        save_embeddings(data, embeddings, final_2d_embeddings, 'embeddings.json')
+        save_embeddings(data, embeddings, final_2d_embeddings, 'full_embeddings.json')
                 
         print("Embeddings file created successfully.")
     else:
         print("Failed to create embeddings file.")
 
-create_embedding_file("MIT-Catalog-2025-SDM V2.xlsx")
+
+
+# create_embedding_file("MIT-Catalog-2025-SDM V2.xlsx")
 
