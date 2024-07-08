@@ -33,14 +33,12 @@ if 'messages' not in st.session_state:
     st.session_state['messages'] = initial_messages
 
 st.title('MIT Subject Explorer')
-page_height = streamlit_js_eval(js_expressions='window.innerWidth', key='HEIGHT',  want_output = True,)
+page_height = int(streamlit_js_eval(js_expressions='screen.height', key = 'SCR1'))
 col1, col2 = st.columns([4,6], gap='large')
 
 # chat bar
 with col1:
-    # st.header("Ask")
-    
-    chat_container = st.container( height=max(page_height-850, 500) )    
+    chat_container = st.container( height=max(page_height-400, 500) )    
     
     if prompt := st.chat_input("What is up?"):   
         st.session_state.messages.append({"role": "user", "content": prompt})
