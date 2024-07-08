@@ -1,3 +1,4 @@
+import streamlit as st
 import numpy as np
 import pandas as pd
 import umap.umap_ as umap
@@ -5,11 +6,13 @@ import json
 
 
 # Function to read the JSON file
+@st.cache_data
 def read_json(file_path):
     with open(file_path, 'r', encoding='utf-8') as f:
         content = f.read()
         return json.loads(content)
-    
+
+@st.cache_data   
 def get_raw_embeddings_from_file(file_name):
     raw_data = read_json(file_name)
     ids = []
@@ -31,7 +34,8 @@ def get_raw_embeddings_from_file(file_name):
         x[item['id'].upper()] = item['x']
         y[item['id'].upper()] = item['y']
     return ids, embeddings, titles, descriptions, x, y
-    
+
+@st.cache_data   
 def get_2d_embeddings_from_file(file_name):            
     raw_data = read_json(file_name)
     ids = []

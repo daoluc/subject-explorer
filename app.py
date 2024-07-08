@@ -1,4 +1,6 @@
 import streamlit as st
+st.set_page_config(layout="wide")
+
 import pandas as pd
 from bokeh.plotting import ColumnDataSource, figure
 from agent import add_assistant_response
@@ -6,7 +8,7 @@ from load_embeddings import get_2d_embeddings_from_file
 from bokeh.models import TapTool, CustomJS, HoverTool, LabelSet
 from streamlit_js_eval import streamlit_js_eval
 
-st.set_page_config(layout="wide")
+
 
 st.markdown(
     """
