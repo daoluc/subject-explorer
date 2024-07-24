@@ -116,20 +116,13 @@ with col2:
             const ind = points[key].selected.indices[0];
             
             const text = points[key].data.id[ind] + ' ' + points[key].data.title[ind];
-            if (data.t.includes(text)) {
-                const index = data.t.indexOf(text);
-                data.x.splice(index, 1);
-                data.y.splice(index, 1);
-                data.t.splice(index, 1);
-                data.ind.splice(index, 1);
-            }
-            else {        
+            if (!data.t.includes(text)) {
                 data.x.push(points[key].data.x[ind]);
                 data.y.push(points[key].data.y[ind]);
                 data.t.push(text);
-                data.ind.push(ind);
-                window.open('https://student.mit.edu/catalog/search.cgi?search=' + points[key].data.id[ind], '_blank');
+                data.ind.push(ind);                
             }
+            window.open('https://student.mit.edu/catalog/search.cgi?search=' + points[key].data.id[ind], '_blank');
             break;
         }
     }
