@@ -49,6 +49,21 @@ def create_embedding_file(file_name):
     
     # Check if data is not None
     if data is not None:
+        # Create a priority column based on isDepth, isElective, engUnits, and mgmtUnits
+        data['priority'] = (
+            (data['isDepth'] == 'Y').astype(int) * 8 +
+            (data['isElective'] == 'Y').astype(int) * 4 +
+            (data['engUnits'].notna() & (data['engUnits'] > 0)).astype(int) * 2 +
+            (data['mgmtUnits'].notna() & (data['mgmtUnits'] > 0)).astype(int)
+        )
+        
+        # Sort by priority (descending) and remove duplicates based on SUBJECT_TITLE
+        data = data.sort_values('priority', ascending=False)
+        data = data.drop_duplicates(subset='SUBJECT_TITLE', keep='first')
+        
+        # Drop the temporary priority column
+        data = data.drop('priority', axis=1)
+        
         # Create texts from attribute subject_title and subject_description
         texts = ['Title: ' + str(title) + '. Description: ' + str(description) for title, description in zip(data['SUBJECT_TITLE'], data['SUBJECT_DESCRIPTION'])]
         
