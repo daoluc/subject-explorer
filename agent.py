@@ -11,7 +11,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 from create_embeddings import create_embeddings
 from load_embeddings import get_raw_embeddings_from_file  
 
-GPT_MODEL = "gpt-4o-mini"
+GPT_MODEL = "gpt-4o"
 client = OpenAI(
     api_key=st.secrets["openai_key"]
 )
