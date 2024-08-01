@@ -22,14 +22,19 @@ threshold = 0.42
 def highlight_subjects(subject_ids):
     print("highlighting subjects: ",subject_ids)
     print("labels: ",st.session_state.labels)
+    not_found = [id for id in subject_ids if id.upper() not in subject_titles]
     new_data = dict(x=[], y=[], t=[], ind=[])
     for id in subject_ids:
-        new_data['x'].append(x[id.upper()])
-        new_data['y'].append(y[id.upper()])
-        new_data['t'].append(id.upper() + ' ' + subject_titles[id.upper()])
-        new_data['ind'].append(id.upper())
+        if(id.upper() in subject_titles):
+            new_data['x'].append(x[id.upper()])
+            new_data['y'].append(y[id.upper()])
+            new_data['t'].append(id.upper() + ' ' + subject_titles[id.upper()])
+            new_data['ind'].append(id.upper())
     st.session_state.labels.data = new_data
-    return "Subjects are highlighted in the graph"
+    if not_found:
+        return f"Subjects {not_found} not found. Other subjects are hightlighted in the graph"
+    else:
+        return "Subjects are highlighted in the graph"
 
 def get_subject_info(subject_ids):
     print("getting subject info: ",subject_ids)
