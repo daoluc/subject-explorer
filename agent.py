@@ -35,7 +35,10 @@ def get_subject_info(subject_ids):
     print("getting subject info: ",subject_ids)
     subject_info = []
     for id in subject_ids:
-        subject_info.append(f"Title: {id} {subject_titles[id]}. Description: {subject_description[id]}")
+        if id not in subject_titles:
+            subject_info.append(f"Subject {id} not found")
+        else:
+            subject_info.append(f"Title: {id} {subject_titles[id]}. Description: {subject_description[id]}")
     return "\n".join(subject_info)
 
 def find_related_subjects(query, top_n = 10):
@@ -103,27 +106,27 @@ tools = [
             },
         }        
     },
-    # {
-    #     "type": "function",
-    #     "function": {
-    #         "name": "get_subject_info",
-    #         "description": "Get subject info based on subject ids. Call for multiple subjects",
-    #         "parameters": {
-    #             "type": "object",
-    #             "properties": {
-    #                 "subject_ids": {
-    #                     "type": "array",
-    #                     "items": {
-    #                         "type": "string",
-    #                         "description": "subject id",
-    #                     },
-    #                     "description": "array of subject ids to get info for",
-    #                 },
-    #             },
-    #             "required": ["subject_ids"],
-    #         },
-    #     }        
-    # },
+    {
+        "type": "function",
+        "function": {
+            "name": "get_subject_info",
+            "description": "Get subject info based on subject ids. Call for multiple subject IDs. Subject ID consists of a few characters and numbers with a dot in between such as 16.332 or IDS.332",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "subject_ids": {
+                        "type": "array",
+                        "items": {
+                            "type": "string",
+                            "description": "subject id",
+                        },
+                        "description": "array of subject ids to get info for",
+                    },
+                },
+                "required": ["subject_ids"],
+            },
+        }        
+    },
     {
         "type": "function",
         "function": {
