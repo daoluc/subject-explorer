@@ -1,6 +1,7 @@
 import streamlit as st
 st.set_page_config(layout="wide")
 
+import math
 import pandas as pd
 from bokeh.plotting import ColumnDataSource, figure
 from agent import add_assistant_response
@@ -135,15 +136,22 @@ with col2:
 
     for t in types:
         source = ColumnDataSource(data[data["type"] == t])
+        
+        # Calculate the size based on the value of data["c"]
+        sizes = [5 + int(round(math.log(c, 5), 0) * 3) for c in source.data["c"]]
+        source.data['size'] = sizes  # Add sizes to the ColumnDataSource
+        
+        points[t] = source
+        
         points[t] = source
         if(t=='Core'):
-            p.square('x', 'y', size=8, source=source, alpha=0.8, legend_label=t, color=colors[types.index(t)])
+            p.square('x', 'y', size='size', source=source, alpha=0.8, legend_label=t, color=colors[types.index(t)])
         elif 'Depth' in t:
-            p.square('x', 'y', size=8, source=source, alpha=0.5, legend_label=t, color=colors[types.index(t)])
+            p.square('x', 'y', size='size', source=source, alpha=0.5, legend_label=t, color=colors[types.index(t)])
         elif 'Elective' in t:
-            p.triangle('x', 'y', size=8, source=source, alpha=0.5, legend_label=t, color=colors[types.index(t)])
+            p.triangle('x', 'y', size='size', source=source, alpha=0.5, legend_label=t, color=colors[types.index(t)])
         else:
-            p.circle('x', 'y', size=4, source=source, alpha=0.3, legend_label=t, color=colors[types.index(t)])
+            p.circle('x', 'y', size='size', source=source, alpha=0.3, legend_label=t, color=colors[types.index(t)])
         p.legend.title = 'Subject Type'
         p.legend.location = "top_left"
         p.legend.click_policy="hide"

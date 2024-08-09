@@ -35,6 +35,7 @@ def save_embeddings(data, embeddings, final_2d_embeddings, output_file):
             'elect': 1 if data['isElective'].iloc[i] == 'Y' else 0,
             'eng': 1 if (data['engUnits'].iloc[i] is not None and pd.notna(data['engUnits'].iloc[i]) and data['engUnits'].iloc[i] > 0) else 0,
             'mgmt': 1 if (data['mgmtUnits'].iloc[i] is not None and pd.notna(data['mgmtUnits'].iloc[i]) and data['mgmtUnits'].iloc[i] > 0) else 0,
+            'c': int(data['SDMCount'].iloc[i]),
             'x': round(float(final_2d_embeddings[i][0]), 4),
             'y': round(float(final_2d_embeddings[i][1]), 4),
             'e': embeddings[i].tolist(),
@@ -53,8 +54,9 @@ def create_embedding_file(file_name):
         data['priority'] = (
             (data['isDepth'] == 'Y').astype(int) * 8 +
             (data['isElective'] == 'Y').astype(int) * 4 +
-            (data['engUnits'].notna() & (data['engUnits'] > 0)).astype(int) * 2 +
-            (data['mgmtUnits'].notna() & (data['mgmtUnits'] > 0)).astype(int)
+            (data['engUnits'].notna() & (data['engUnits'] > 0)).astype(int) +
+            (data['mgmtUnits'].notna() & (data['mgmtUnits'] > 0)).astype(int) +
+            (data['SDMCount'].notna() & (data['SDMCount'] > 0)).astype(int)
         )
         
         # Sort by priority (descending) and remove duplicates based on SUBJECT_TITLE

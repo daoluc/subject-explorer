@@ -43,11 +43,13 @@ def get_2d_embeddings_from_file(file_name):
     types = []
     x = []
     y = []
+    c = []
     for item in raw_data:
         ids.append(item['id'])
         titles.append(item['t'])
         x.append(item['x'])
         y.append(item['y'])
+        c.append(item['c'])
         if (item['core']):
             types.append('Core')
         elif (item['depth']):
@@ -74,5 +76,6 @@ def get_2d_embeddings_from_file(file_name):
         y=y,        
         id=ids,
         title=titles,
-        type=types
+        type=types,
+        c=c
     ))
