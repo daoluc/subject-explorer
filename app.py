@@ -2,11 +2,10 @@ import streamlit as st
 st.set_page_config(layout="wide")
 
 import math
-import pandas as pd
 from bokeh.plotting import ColumnDataSource, figure
 from agent import add_assistant_response
 from load_embeddings import get_2d_embeddings_from_file
-from bokeh.models import TapTool, CustomJS, HoverTool, LabelSet
+from bokeh.models import TapTool, CustomJS, LabelSet, WheelZoomTool
 from streamlit_js_eval import streamlit_js_eval
 
 
@@ -102,7 +101,10 @@ with col2:
 
     data = get_2d_embeddings_from_file('full_embeddings.json')
 
-    p = figure(width=700, height=500, x_range=(-5, 20), y_range=(0,25), tooltips=TOOLTIPS,
+    # Calculate the remaining height for the graph
+    graph_height = max(page_height - 600, 500)  # Match the chat container height
+
+    p = figure(width=graph_height, height=graph_height, x_range=(-2, 12), y_range=(2, 15), tooltips=TOOLTIPS,
             title="UMAP projection of the embeddings of MIT subjects")
     
     # labels = st.session_state.labels 
@@ -158,5 +160,7 @@ with col2:
         
     callback=CustomJS(args=dict(points=points, labels=labels), code=code)
     p.add_tools(TapTool(callback=callback))
+    # Enable zoom tool by default
+    p.toolbar.active_scroll = p.select_one(WheelZoomTool)
 
     st.bokeh_chart(p)
