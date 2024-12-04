@@ -1,4 +1,8 @@
-# subject-explorer
+# MIT Subject Explore
+
+Explore MIT subjects by chating with a virtual academic advisor and browsing the map!
+
+<img src="subject_explorer.png" width="800">
 
 ## Create a virtual environment
 
