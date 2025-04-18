@@ -2,6 +2,9 @@
 *.xlsx
 secrets.toml
 archive/
+.DS_Store
+.devcontainer/
+devcontainer.jsonx
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
